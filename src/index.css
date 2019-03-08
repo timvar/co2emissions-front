@@ -12,3 +12,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.nonbulleted {
+  list-style-type: none;
+}
+
+.year {
+  margin-right: 10px;
+}
+
+.per-capita-checkbox {
+  margin-right: 10px;
+}
+
+.emission-csv-download {
+  margin-top: 50px;
+}
+
+.population-csv-download {
+  margin-top: 50px;
+}
+

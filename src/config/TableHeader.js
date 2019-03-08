@@ -1,8 +1,4 @@
-const co2EmissionsHeader = [
-  "Country Name",
-  "Country Code",
-  "Indicator Name",
-  "Indicator Code",
+const emissionTableHeader = [
   "1960",
   "1961",
   "1962",
@@ -61,19 +57,7 @@ const co2EmissionsHeader = [
   "2015",
   "2016",
   "2017",
-  "2018",
-  "2019",
-  "2020",
-  "2021",
-  "2022",
-  "2023",
-  "2024",
-  "2025",
-  "2026",
-  "2027",
-  "2028",
-  "2029",
-  "2030",
+  "2018"
 ]
 
-export default co2EmissionsHeader;
+export default emissionTableHeader;

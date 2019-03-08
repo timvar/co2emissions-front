@@ -3,62 +3,101 @@ import CSVReader from "react-csv-reader";
 import co2EmissionsHeader from '../config/Co2EmissionsHeader';
 import axios from 'axios';
 
-
+/* Data update form CSV files */
+/* CSVReader component used   */
 export default class Update extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { emissionDataArray: [] }
+    this.state = { 
+      emissionDataArray: [],
+      populationDataArray: [] 
+    }
   }
-
   
-  handleForce = data => {
-    const url = 'https://co2emissions-api.herokuapp.com/emissions/'
+  /* CSVReader data handler */
+  handleEmissionUpdate = emissionData => {
+    const emissionUrl = 'https://co2emissions-api.herokuapp.com/emissions/';
     
-    data.forEach(elementArray => {
-      elementArray.forEach((item, index) => {
-        console.log('index: ', index);
-        console.log('header: ', co2EmissionsHeader[index]);
-        console.log('item: ', item);
+    emissionData.forEach(emissionArray => {
+      emissionArray.forEach((emission, index) => {
         
-        if (item && (index >= 4)) {
-          const emissionData = {
+        /* emission data starts in 5th position of CSV array */
+        if (emission && (index >= 4)) {
+          const newEmissionData = {
             year: co2EmissionsHeader[index],
-            co2emission: item
+            co2emission: emission
           }
 
           this.setState({ 
-            emissionDataArray: [...this.state.emissionDataArray, emissionData] 
+            emissionDataArray: [...this.state.emissionDataArray, newEmissionData] 
           });
         }
       })
 
-      let countryCode = elementArray[1];
-      let apiEndPoint = url + countryCode;
-
-      axios.post( apiEndPoint, this.state.emissionDataArray )
+      let countryCode = emissionArray[1];
+      
+      axios.post( emissionUrl + countryCode, this.state.emissionDataArray )
           .then( () => console.log('success'))
           .catch(err => console.log('error: ', err));
 
-      console.log(this.state.emissionDataArray);
-        this.setState({ 
-          emissionDataArray: [] 
-        });
-
+      this.setState({ 
+        emissionDataArray: [] 
+      });
     });
-  };
+  }
+
+  /* CSVReader data handler */
+  handlePopulationUpdate = populationData => {
+    const populationUrl = 'https://co2emissions-api.herokuapp.com/populations/';
+    
+    populationData.forEach(populationArray => {
+      populationArray.forEach((population, index) => {
+        
+        /* population data starts in 5th position of CSV array */
+        if (population && (index >= 4)) {
+          const newPopulationData = {
+            year: co2EmissionsHeader[index],
+            population: population
+          }
+
+          this.setState({ 
+            populationDataArray: [...this.state.populationDataArray, newPopulationData] 
+          });
+        }
+      })
+
+      let countryCode = populationArray[1];
+      
+      axios.post( populationUrl + countryCode, this.state.populationDataArray )
+          .then( () => console.log('success'))
+          .catch(err => console.log('error: ', err));
+
+      this.setState({ 
+        populationDataArray: [] 
+      });
+    });
+  }
 
   render() {
     
     return (
       <div className="container">
-        <div>
-          <h5>Choose CSV file to download</h5>
+        <div className="emission-csv-download">
+          <h5>Choose Emission CSV file to download</h5>
         </div>
         <CSVReader
           cssClass="react-csv-input"
           label=""
-          onFileLoaded={this.handleForce}
+          onFileLoaded={this.handleEmissionUpdate}
+        />
+        <div className="population-csv-download">
+          <h5>Choose Population CSV file to download</h5>
+        </div>
+        <CSVReader
+          cssClass="react-csv-input"
+          label=""
+          onFileLoaded={this.handlePopulationUpdate}
         />
       </div>
     )

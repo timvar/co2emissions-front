@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Update from './components/Update';
 import Show from './components/Show';
+import SignIn from './components/SignIn';
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/update" component={Update} />
+            <Route path='/signin' component={SignIn} />
             <Route path="/show" component={Show} />
           </Switch>
         </div>

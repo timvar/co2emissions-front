@@ -1,7 +1,15 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import SignedInLinks from './SignedInLinks';
+import SignedOutLinks from './SignedOutLinks';
 
 const Navbar = (props) => {
+  const { auth, profile } = props;
+
+  /* Show different set of links in Navbar depending on if user logged in or out */
+  const links = auth.uid ? <SignedInLinks profile={profile} /> : <SignedOutLinks />;
+
   return (
     <div className="container">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -10,20 +18,18 @@ const Navbar = (props) => {
         </button>
         <Link className="navbar-brand" to="/">CO2 Emissions</Link>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/show">Show</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/update">Update</Link>
-            </li>
-          </ul>
+          {links}
         </div>
       </nav>
     </div>
   )
 }
 
-export default Navbar;
-
-
+/* User login status in Redux store */
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        auth: state.firebase.auth,
+    }
+}
+export default connect(mapStateToProps)(Navbar);
