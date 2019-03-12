@@ -7,43 +7,29 @@ import axios from 'axios';
 /* CSVReader component used   */
 export default class Update extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      emissionDataArray: [],
-      populationDataArray: [] 
-    }
-  }
-  
   /* CSVReader data handler */
   handleEmissionUpdate = emissionData => {
     const emissionUrl = 'https://co2emissions-api.herokuapp.com/emissions/';
     
     emissionData.forEach(emissionArray => {
-      emissionArray.forEach((emission, index) => {
+      let emissionDataArray = [];
+      emissionArray.forEach((emissionItem, index) => {
         
         /* emission data starts in 5th position of CSV array */
-        if (emission && (index >= 4)) {
+        if (emissionItem && (index >= 4)) {
           const newEmissionData = {
             year: co2EmissionsHeader[index],
-            co2emission: emission
+            co2emission: emissionItem
           }
-
-          this.setState({ 
-            emissionDataArray: [...this.state.emissionDataArray, newEmissionData] 
-          });
+        emissionDataArray.push(newEmissionData);
         }
       })
 
       let countryCode = emissionArray[1];
       
-      axios.post( emissionUrl + countryCode, this.state.emissionDataArray )
+      axios.post( emissionUrl + countryCode, emissionDataArray )
           .then( () => console.log('success'))
           .catch(err => console.log('error: ', err));
-
-      this.setState({ 
-        emissionDataArray: [] 
-      });
     });
   }
 
@@ -51,34 +37,31 @@ export default class Update extends Component {
   handlePopulationUpdate = populationData => {
     const populationUrl = 'https://co2emissions-api.herokuapp.com/populations/';
     
+
     populationData.forEach(populationArray => {
-      populationArray.forEach((population, index) => {
+      let populationDataArray = [];
+      populationArray.forEach((populationItem, index) => {
         
         /* population data starts in 5th position of CSV array */
-        if (population && (index >= 4)) {
+        if (populationItem && (index >= 4)) {
           const newPopulationData = {
             year: co2EmissionsHeader[index],
-            population: population
+            population: populationItem
           }
-
-          this.setState({ 
-            populationDataArray: [...this.state.populationDataArray, newPopulationData] 
-          });
+        populationDataArray.push(newPopulationData);
         }
       })
 
       let countryCode = populationArray[1];
-      
-      axios.post( populationUrl + countryCode, this.state.populationDataArray )
-          .then( () => console.log('success'))
+      console.log(populationDataArray);
+      axios.post( populationUrl + countryCode, populationDataArray )
+          .then( () => {
+            console.log('success');
+          })
           .catch(err => console.log('error: ', err));
-
-      this.setState({ 
-        populationDataArray: [] 
-      });
     });
   }
-
+  
   render() {
     
     return (
